@@ -1,0 +1,24 @@
+{
+  "name": "ultimate-command-center",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Unified Multi-Repository Intelligence & Operations Command Center",
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "adapters",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "dev": "node --import tsx services/api-gateway/src/server.js"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.0"
+  },
+  "dependencies": {
+    "satellite.js": "^7.1.0"
+  }
+}

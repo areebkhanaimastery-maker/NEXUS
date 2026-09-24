@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build:
+      context: ../..
+      dockerfile: services/api-gateway/Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+
+  command-center-ui:
+    build:
+      context: ../..
+      dockerfile: apps/command-center/Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - api-gateway
+
+  # Upstream Service Containers (Isolated AGPL / Apache-2.0 / MIT Microservices)
+  worldmonitor-service:
+    image: koala73/worldmonitor:latest
+    ports:
+      - "8001:8000"
+
+  godseye-service:
+    image: idocohen560/gods-eye-worldview:latest
+    ports:
+      - "8002:8000"
+
+  webcheck-service:
+    image: lissy93/web-check:latest
+    ports:
+      - "3002:3002"
+
+  missioncontrol-service:
+    image: fleetspace/missioncontrol:latest
+    ports:
+      - "8003:8000"
+
+  overwatch-service:
+    image: confinia/overwatch:latest
+    ports:
+      - "8004:8000"
+
+  # Sandboxed Security Harness (Strict Network Egress & Isolated Boundary)
+  security-lab-harness:
+    image: vxcontrol/pentagi:latest
+    container_name: security-lab-harness
+    network_mode: bridge
+    environment:
+      - EXECUTION_MODE=SANDBOXED_OBSERVE_ONLY
